@@ -7,7 +7,6 @@ from usersapp.serializers import UserModelSerializer
 class ProjectModelSerializer(ModelSerializer):
     # user_set = UserModelSerializer(many=True)
 
-
     class Meta:
         model = Project
         fields = '__all__'

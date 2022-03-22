@@ -22,7 +22,7 @@ class ProjectViewSet(ListModelMixin, RetrieveModelMixin, UpdateModelMixin, Creat
     serializer_class = ProjectModelSerializer
     queryset = Project.objects.all()
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
-    pagination_class = ProjectLimitOffsetPagination
+    # pagination_class = ProjectLimitOffsetPagination
 
     def get_queryset(self):
         queryset = Project.objects.all()
@@ -37,7 +37,7 @@ class ToDoViewSet(ListModelMixin, RetrieveModelMixin, UpdateModelMixin, CreateMo
     serializer_class = ToDoModelSerializer
     queryset = ToDo.objects.all()
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
-    pagination_class = ToDoLimitOffsetPagination
+    # pagination_class = ToDoLimitOffsetPagination
     filterset_fields = ['project']
 
     def destroy(self, request, *args, **kwargs):

@@ -18,10 +18,10 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from notesapp.views import ProjectViewSet, ToDoViewSet
-from usersapp.views import UserViewSet
+from usersapp.views import UserModelViewSet
 
 router = DefaultRouter()
-router.register('users', UserViewSet, basename='users')
+router.register('users', UserModelViewSet)
 router.register('project', ProjectViewSet, basename='project')
 router.register('todo', ToDoViewSet)
 # filter_router = DefaultRouter()

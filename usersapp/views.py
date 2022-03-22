@@ -10,14 +10,14 @@ from rest_framework.generics import UpdateAPIView
 from rest_framework.decorators import action, api_view, renderer_classes
 
 
-class UserLimitOffsetPagination(LimitOffsetPagination):
-    default_limit = 2
+# class UserLimitOffsetPagination(LimitOffsetPagination):
+#     default_limit = 2
 
 
-# class UserModelViewSet(ModelViewSet):
-#     serializer_class = UserModelSerializer
-#     queryset = User.objects.all()
-#     pagination_class = UserLimitOffsetPagination
+class UserModelViewSet(ModelViewSet):
+    serializer_class = UserModelSerializer
+    queryset = User.objects.all()
+    # pagination_class = UserLimitOffsetPagination
 #
 #
 # @api_view(['GET'])
@@ -39,8 +39,8 @@ class UserLimitOffsetPagination(LimitOffsetPagination):
 #     serializer_class = UserModelSerializer
 
 
-class UserViewSet(ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
-    serializer_class = UserModelSerializer
-    queryset = User.objects.all()
-    renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
-    pagination_class = UserLimitOffsetPagination
+# class UserViewSet(ListModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
+#     serializer_class = UserModelSerializer
+#     queryset = User.objects.all()
+#     renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
+#     pagination_class = UserLimitOffsetPagination
