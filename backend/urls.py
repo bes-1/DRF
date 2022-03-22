@@ -21,12 +21,16 @@ from notesapp.views import ProjectViewSet, ToDoViewSet
 from usersapp.views import UserViewSet
 
 router = DefaultRouter()
-router.register('users', UserViewSet)
-router.register('project', ProjectViewSet)
+router.register('users', UserViewSet, basename='users')
+router.register('project', ProjectViewSet, basename='project')
 router.register('todo', ToDoViewSet)
-
+# filter_router = DefaultRouter()
+# filter_router.register('param', UserParamFilterViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    # path('views/', users_view),
+    # path('views/<int:pk>/', users_view),
+    # path('update_user/<int:pk>/', UserUpdateAPIView.as_view()),
 ]
