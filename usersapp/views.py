@@ -8,6 +8,7 @@ from usersapp.models import User
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.generics import UpdateAPIView
 from rest_framework.decorators import action, api_view, renderer_classes
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, DjangoModelPermissions
 
 
 # class UserLimitOffsetPagination(LimitOffsetPagination):
@@ -17,6 +18,7 @@ from rest_framework.decorators import action, api_view, renderer_classes
 class UserModelViewSet(ModelViewSet):
     serializer_class = UserModelSerializer
     queryset = User.objects.all()
+    permission_classes = [DjangoModelPermissions]
     # pagination_class = UserLimitOffsetPagination
 #
 #

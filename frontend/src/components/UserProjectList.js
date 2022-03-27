@@ -19,7 +19,7 @@ const ProjectItem = ({project}) => {
 
 const UserProjectList = ({projects}) => {
     var {id} = useParams()
-    var filteredProjects = projects.filter((project) => project.users.includes(parseInt(id)))
+    var filteredProjects = projects.filter((project) => project.user_set.includes(parseInt(id)))
 
     return (
         <table>
