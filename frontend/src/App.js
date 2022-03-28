@@ -7,6 +7,7 @@ import ProjectList from "./components/ProjectList.js";
 import {HashRouter, BrowserRouter, Route, Routes, Link, useLocation} from "react-router-dom";
 import ToDoList from "./components/ToDoList";
 import UserProjectList from "./components/UserProjectList.js";
+import LoginForm from "./components/LoginForm.js";
 
 
 const NotFound = () => {
@@ -23,12 +24,15 @@ class App extends React.Component {
             'users': [],
             'projects': [],
             'todos': [],
+            'token': '',
         }
     }
 
-    componentDidMount() {
+    getData() {
+        let headers = this.getHeader()
+
         axios
-            .get('http://127.0.0.1:8000/api/users/')
+            .get('http://127.0.0.1:8000/api/users/', {headers})
             .then(response => {
                 const users = response.data
 
@@ -36,9 +40,14 @@ class App extends React.Component {
                     'users': users
                 })
             })
-            .catch(error => console.log(error))
+            .catch(error => {
+                console.log(error)
+                this.setState({
+                    'users': []
+                })
+            })
         axios
-            .get('http://127.0.0.1:8000/api/project/')
+            .get('http://127.0.0.1:8000/api/project/', {headers})
             .then(response => {
                 const projects = response.data
 
@@ -46,9 +55,14 @@ class App extends React.Component {
                     'projects': projects
                 })
             })
-            .catch(error => console.log(error))
+            .catch(error => {
+                console.log(error)
+                this.setState({
+                    'projects': []
+                })
+            })
         axios
-            .get('http://127.0.0.1:8000/api/todo/')
+            .get('http://127.0.0.1:8000/api/todo/', {headers})
             .then(response => {
                 const todos = response.data
 
@@ -56,7 +70,55 @@ class App extends React.Component {
                     'todos': todos
                 })
             })
+            .catch(error => {
+                console.log(error)
+                this.setState({
+                    'todos': []
+                })
+            })
+    }
+
+    componentDidMount() {
+        let token = localStorage.getItem('token')
+        this.setState({
+            'token': token
+        }, this.getData)
+    }
+
+    isAuth() {
+        return !!this.state.token
+    }
+
+    getHeader() {
+        if (this.isAuth()) {
+            return {
+                'Authorization': 'Token ' + this.state.token
+            }
+
+        }
+        return {}
+    }
+
+    getToken(login, password) {
+        console.log(login, password)
+        axios
+            .post('http://127.0.0.1:8000/api-auth-token/', {'username': login, 'password': password})
+            .then(response => {
+                const token = response.data.token
+                console.log(token)
+                localStorage.setItem('token', token)
+                this.setState({
+                    'token': token
+                }, this.getData)
+            })
             .catch(error => console.log(error))
+    }
+
+    logout() {
+        localStorage.setItem('token', '')
+        this.setState({
+            'token': ''
+        }, this.getData)
     }
 
     render() {
@@ -67,11 +129,17 @@ class App extends React.Component {
                         <li><Link to='/'>Users</Link></li>
                         <li><Link to='/projects'>Projects</Link></li>
                         <li><Link to='/todos'>Notes</Link></li>
+                        <li>
+                            {this.isAuth() ? <button onClick={() => this.logout()}>Logout</button> :
+                                <Link to='/login'>Login</Link>}
+                        </li>
                     </nav>
                     <Routes>
                         <Route exact path='/' element={<UserList users={this.state.users}/>}/>
                         <Route exact path='/projects' element={<ProjectList projects={this.state.projects}/>}/>
                         <Route exact path='/todos' element={<ToDoList todos={this.state.todos}/>}/>
+                        <Route exact path='/login'
+                               element={<LoginForm getToken={(login, password) => this.getToken(login, password)}/>}/>
                         <Route path='/user/:id' element={<UserProjectList projects={this.state.projects}/>}/>
                         <Route path='*' element={<NotFound/>}/>
                     </Routes>
