@@ -3,7 +3,7 @@ from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, UpdateModelMixin
-from usersapp.serializers import UserModelSerializer
+from usersapp.serializers import UserModelSerializer, UserModelSerializerV2
 from usersapp.models import User
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.generics import UpdateAPIView
@@ -16,12 +16,16 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, DjangoModelPer
 
 
 class UserModelViewSet(ModelViewSet):
-    serializer_class = UserModelSerializer
+    # serializer_class = UserModelSerializer
     queryset = User.objects.all()
-    permission_classes = [DjangoModelPermissions]
+
+    # permission_classes = [DjangoModelPermissions]
     # pagination_class = UserLimitOffsetPagination
-#
-#
+    def get_serializer_class(self):
+        if self.request.version == '2.0':
+            return UserModelSerializerV2
+        return UserModelSerializer
+
 # @api_view(['GET'])
 # @renderer_classes([JSONRenderer])
 # def users_view(request, pk=None):
