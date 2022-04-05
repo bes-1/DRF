@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'usersapp',
     'corsheaders',
     'notesapp',
+    'graphene_django',
     'drf_yasg',
 ]
 
@@ -130,6 +131,10 @@ REST_FRAMEWORK = {
 
 if DEBUG:
     REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'].append('rest_framework.renderers.BrowsableAPIRenderer')
+
+GRAPHENE = {
+    'SCHEMA': 'notesapp.schema.schema'
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
