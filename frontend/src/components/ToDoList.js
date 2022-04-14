@@ -1,4 +1,4 @@
-const ToDoItem = ({todo}) => {
+const ToDoItem = ({todo, deleteToDo}) => {
     return (
         <tr>
             <td>
@@ -19,12 +19,15 @@ const ToDoItem = ({todo}) => {
             <td>
                 {todo.is_active}
             </td>
+            <td>
+                <button onClick={()=>deleteToDo(todo.id)}>Delete</button>
+            </td>
         </tr>
     )
 }
 
 
-const ToDoList = ({todos}) => {
+const ToDoList = ({todos, deleteToDo}) => {
     return (
         <table>
             <th>
@@ -45,7 +48,7 @@ const ToDoList = ({todos}) => {
              <th>
                 Status is_active
             </th>
-            {todos.map((todo) => <ToDoItem todo={todo} />)}
+            {todos.map((todo) => <ToDoItem todo={todo} deleteToDo={deleteToDo}/>)}
         </table>
     )
 }

@@ -8,6 +8,7 @@ import {HashRouter, BrowserRouter, Route, Routes, Link, useLocation} from "react
 import ToDoList from "./components/ToDoList";
 import UserProjectList from "./components/UserProjectList.js";
 import LoginForm from "./components/LoginForm.js";
+import ToDoForm from "./components/ToDoForm.js";
 
 
 const NotFound = () => {
@@ -114,6 +115,27 @@ class App extends React.Component {
             .catch(error => console.log(error))
     }
 
+    newToDo(text_note, users, projects) {
+        let headers = this.getHeader()
+        console.log(text_note, users, projects)
+    }
+
+
+    deleteToDo(id) {
+        let headers = this.getHeader()
+        console.log(id)
+        axios
+            .delete(`http://127.0.0.1:8000/api/todo/${id}`, {headers})
+            .then(response => {
+                this.setState({
+                    'todos': this.state.todos.filter((todo) => todo.id != id)
+                })
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+
     logout() {
         localStorage.setItem('token', '')
         this.setState({
@@ -129,6 +151,7 @@ class App extends React.Component {
                         <li><Link to='/'>Users</Link></li>
                         <li><Link to='/projects'>Projects</Link></li>
                         <li><Link to='/todos'>Notes</Link></li>
+                        <li><Link to='/todos/create'>New note</Link></li>
                         <li>
                             {this.isAuth() ? <button onClick={() => this.logout()}>Logout</button> :
                                 <Link to='/login'>Login</Link>}
@@ -137,7 +160,10 @@ class App extends React.Component {
                     <Routes>
                         <Route exact path='/' element={<UserList users={this.state.users}/>}/>
                         <Route exact path='/projects' element={<ProjectList projects={this.state.projects}/>}/>
-                        <Route exact path='/todos' element={<ToDoList todos={this.state.todos}/>}/>
+                        <Route exact path='/todos'
+                               element={<ToDoList todos={this.state.todos} deleteToDo={(id) => this.deleteToDo(id)}/>}/>
+                        <Route exact path='/todos/create'
+                               element={<ToDoForm users={this.state.users} projects={this.state.projects} newToDo={(text_note, users, projects) => this.newToDo(text_note, users, projects)}/>}/>
                         <Route exact path='/login'
                                element={<LoginForm getToken={(login, password) => this.getToken(login, password)}/>}/>
                         <Route path='/user/:id' element={<UserProjectList projects={this.state.projects}/>}/>
