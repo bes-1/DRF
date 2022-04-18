@@ -9,6 +9,7 @@ import ToDoList from "./components/ToDoList";
 import UserProjectList from "./components/UserProjectList.js";
 import LoginForm from "./components/LoginForm.js";
 import ToDoForm from "./components/ToDoForm.js";
+import ProjectForm from "./components/ProjectForm.js";
 
 
 const NotFound = () => {
@@ -136,6 +137,34 @@ class App extends React.Component {
             })
     }
 
+    newProject(name, link_to_repository, users) {
+        let headers = this.getHeader()
+        console.log(name, link_to_repository, users)
+        axios
+            .post('http://127.0.0.1:8000/api/project/', {'name': name, 'link_to_repository': link_to_repository, 'users': users}, {headers})
+            .then(response => {
+                    this.getData()
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+
+    deleteProject(id) {
+        let headers = this.getHeader()
+        console.log(id)
+        axios
+            .delete(`http://127.0.0.1:8000/api/project/${id}`, {headers})
+            .then(response => {
+                this.setState({
+                    'projects': this.state.projects.filter((project) => project.id != id)
+                })
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+
     logout() {
         localStorage.setItem('token', '')
         this.setState({
@@ -150,6 +179,7 @@ class App extends React.Component {
                     <nav>
                         <li><Link to='/'>Users</Link></li>
                         <li><Link to='/projects'>Projects</Link></li>
+                        <li><Link to='/projects/create'>New project</Link></li>
                         <li><Link to='/todos'>Notes</Link></li>
                         <li><Link to='/todos/create'>New note</Link></li>
                         <li>
@@ -159,11 +189,17 @@ class App extends React.Component {
                     </nav>
                     <Routes>
                         <Route exact path='/' element={<UserList users={this.state.users}/>}/>
-                        <Route exact path='/projects' element={<ProjectList projects={this.state.projects}/>}/>
+                        <Route exact path='/projects'
+                               element={<ProjectList projects={this.state.projects}
+                                                     deleteProject={(id) => this.deleteProject(id)}/>}/>
+                        <Route exact path='/projects/create'
+                               element={<ProjectForm users={this.state.users}
+                                                     newProject={(name, link_to_repository, users) => this.newProject(name, link_to_repository, users)}/>}/>
                         <Route exact path='/todos'
                                element={<ToDoList todos={this.state.todos} deleteToDo={(id) => this.deleteToDo(id)}/>}/>
                         <Route exact path='/todos/create'
-                               element={<ToDoForm users={this.state.users} projects={this.state.projects} newToDo={(text_note, users, projects) => this.newToDo(text_note, users, projects)}/>}/>
+                               element={<ToDoForm users={this.state.users} projects={this.state.projects}
+                                                  newToDo={(text_note, users, projects) => this.newToDo(text_note, users, projects)}/>}/>
                         <Route exact path='/login'
                                element={<LoginForm getToken={(login, password) => this.getToken(login, password)}/>}/>
                         <Route path='/user/:id' element={<UserProjectList projects={this.state.projects}/>}/>
