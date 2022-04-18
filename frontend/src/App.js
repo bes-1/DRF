@@ -119,6 +119,14 @@ class App extends React.Component {
     newToDo(text_note, users, projects) {
         let headers = this.getHeader()
         console.log(text_note, users, projects)
+        axios
+            .post('http://127.0.0.1:8000/api/todo/', {'project': projects, 'text_note': text_note, 'user': users}, {headers})
+            .then(response => {
+                    this.getData()
+            })
+            .catch(error => {
+                console.log(error)
+            })
     }
 
 
@@ -141,7 +149,7 @@ class App extends React.Component {
         let headers = this.getHeader()
         console.log(name, link_to_repository, users)
         axios
-            .post('http://127.0.0.1:8000/api/project/', {'name': name, 'link_to_repository': link_to_repository, 'users': users}, {headers})
+            .post('http://127.0.0.1:8000/api/project/', {'name': name, 'link_to_repository': link_to_repository, 'user_set': users}, {headers})
             .then(response => {
                     this.getData()
             })
