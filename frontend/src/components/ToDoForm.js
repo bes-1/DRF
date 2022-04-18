@@ -17,31 +17,31 @@ class ToDoForm extends React.Component {
     }
 
     handleUsersChange(event) {
-        if (!event.target.selectedOption) {
+        if (!event.target.selectedOptions) {
             return
         }
 
         let users = []
-        for (let i = 0; i < event.target.selectedOption.length; i++) {
-            users.push(event.target.selectedOption.item(i).value)
+        for (let i = 0; i < event.target.selectedOptions.length; i++) {
+            users.push(parseInt(event.target.selectedOptions.item(i).value))
         }
 
         this.setState({
-            'users': users,
+            'users': users[0]
         })
     }
 
     handleProjectsChange(event) {
-        if (!event.target.selectedOption) {
+        if (!event.target.selectedOptions) {
             return
         }
         let projects = []
-        for (let i = 0; i < event.target.selectedOption.length; i++) {
-            projects.push(event.target.selectedOption.item(i).value)
+        for (let i = 0; i < event.target.selectedOptions.length; i++) {
+            projects.push(parseInt(event.target.selectedOptions.item(i).value))
         }
 
         this.setState({
-            'projects': projects
+            'projects': projects[0]
         })
     }
 

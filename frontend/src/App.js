@@ -120,7 +120,7 @@ class App extends React.Component {
         let headers = this.getHeader()
         console.log(text_note, users, projects)
         axios
-            .post('http://127.0.0.1:8000/api/todo/', {'project': projects, 'text_note': text_note, 'user': users}, {headers})
+            .post('http://127.0.0.1:8000/api/todo/', {'text_note': text_note, 'user': users, 'project': projects}, {headers})
             .then(response => {
                     this.getData()
             })
