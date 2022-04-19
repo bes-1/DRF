@@ -25,6 +25,8 @@ from usersapp.views import UserModelViewSet
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from graphene_django.views import GraphQLView
+from django.views.generic import TemplateView
+
 
 router = DefaultRouter()
 router.register('users', UserModelViewSet)
@@ -56,6 +58,7 @@ urlpatterns = [
     path('swagger/', schema_view.with_ui()),
     path('graphql/', GraphQLView.as_view(graphiql=True)),
     re_path(r'^swagger(?P<format>\.json|\.yaml)', schema_view.without_ui()),
+    path('', TemplateView.as_view(template_name='index.html')),
     # path('views/', users_view),
     # path('views/<int:pk>/', users_view),
     # path('update_user/<int:pk>/', UserUpdateAPIView.as_view()),
